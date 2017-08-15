@@ -294,17 +294,22 @@ export default {
             }
           },
           {
-            // 按钮的名字
             name: 'user',
-
-            // 显示的 icon
             icon: 'person',
-
-            // 显示的文字
             text: '个人中心',
-
-            // 路由信息
             route: '/user'
+          },
+          {
+            name: 'searchseries',
+            icon: 'book',
+            text: '搜索动画',
+            route: '/searchseries'
+          },
+          {
+            name: 'searchstaff',
+            icon: 'person',
+            text: '搜索声优',
+            route: '/searchstaff'
           }
         ]
       },

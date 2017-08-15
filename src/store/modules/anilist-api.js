@@ -45,6 +45,7 @@ let actions = {
     axios(SETTING.api + series_type + '/search/' + query + '?' + 'access_token=' + state.token)
       .then(res => {
         commit('refreshSearchResult', res.data)
+        return Promise.resolve()
       })
   },
   searchCharacter: async ({ dispatch, commit, state }, query) => {
