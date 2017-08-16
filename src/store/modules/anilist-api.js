@@ -1,5 +1,7 @@
 import axios from 'axios'
 import SETTING from '../api-setting'
+import series from './anilist/series'
+import character from './anilist/character'
 
 let state = {
   token: '',
@@ -35,8 +37,6 @@ let actions = {
     })
   }
 }
-import series from './anilist/series'
-import character from './anilist/character'
 
 export default {
   namespaced: true,
