@@ -11,39 +11,48 @@
         <v-icon class="search-icon">close</v-icon>
       </v-btn>
     </header>
-     <div v-if="loading" class="search-loading">
+    <div v-if="loading" class="search-loading">
       <v-progress-circular indeterminate v-bind:size="70" class="primary--text"></v-progress-circular>
     </div>
-    <div v-if="data && data.length" class="search-content">
-      <v-list two-line>
-        <v-list-item v-for="(item, index) in data" v-bind:key="item.title">
-          <v-list-tile avatar ripple>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.headline }}</v-list-tile-sub-title>
-              <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
-              <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-divider light v-if="index + 1 < data.length"></v-divider>
-        </v-list-item>
-      </v-list>
+    <div class="search-content">
+      <v-layout class="wrapper" row wrap>
+        <v-flex class="item" xs12 v-if="searchResult && searchResult.length" v-for="item in searchResult">
+          <v-card class="primary white--text">
+            <v-container fluid grid-list-lg>
+              <v-layout row>
+                <v-flex xs7>
+                  <div>
+                    <div>{{item.title_japanese}}</div>
+                    <div>{{item.title_english}}</div>
+                  </div>
+                </v-flex>
+                <v-flex xs5>
+                  <v-card-media name="xx" :src="item.image_url_med" height="125px" contain></v-card-media>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>
     </div>
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState,mapMutations } from 'vuex'
 export default {
   name: 'searchSeries',
-  data(){
+  data() {
     return {
       query: '',
-      data:[],
-      loading:false
+      data: [],
+      loading: false
     }
+  },
+  computed: {
+    ...mapState('anilistApi', [
+      'token',
+      'searchResult'
+    ])
   },
   methods: {
     ...mapActions('appShell/appHeader', [
@@ -52,15 +61,16 @@ export default {
     ...mapActions('appShell/appBottomNavigator', [
       'hideBottomNav'
     ]),
-    ...mapActions('anilistApi', [
-      'searchSeries'
+    ...mapActions('anilistApi/series', [
+      'search'
+    ]),
+    ...mapMutations('anilistApi/series', [
+      'emptySearchResult'
     ]),
     async search() {
-      console.log('search')
-      this.data = []
+      this.emptySearchResult()
       this.loading = true
-      this.$el.querySelector('.search-input').blur()
-      await this.searchSeries({series_type:'anime',query:'sukasuka'})
+      await this.search({ series_type: 'anime', query: this.query })
       this.loading = false
     }
   },
@@ -72,31 +82,46 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.app-search-series
+    display flex
+    flex-direction column
+
 header
     display flex
     align-items center
     height 52px
     box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
 
+    .search-input
+        width 100%
+        outline none
+        font-size 16px
+        height 50px
+
+    .search-btn
+        color #959595
+
+.search-content
+    flex 1
+    overflow scroll
+    .wrapper
+        box-sizing border-box
+        margin 0 20px
+
+    .item
+        margin 10px 0
+        width 100%
+
 form
     flex 1
-
-.search-input
-    width 100%
-    outline none
-    font-size 16px
-    height 50px
-
-.search-btn
-    color #959595
 
 .search-loading
     margin-top 30%
     display flex
     justify-content center
 
-.search-content
-    margin-top 20px
+
+
 
 li
     list-style-type none

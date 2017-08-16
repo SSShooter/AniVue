@@ -28,11 +28,7 @@ export default {
     ...mapActions('appShell/appBottomNavigator', [
       'showBottomNav',
       'activateBottomNav'
-    ]),
-    ...mapActions('anilistApi', [
-      'searchSeries',
-      'searchCharacter'
-    ]),
+    ])
   },
   async asyncData() {
     await new Promise((resolve, reject) => {
@@ -55,8 +51,8 @@ export default {
     })
     this.activateBottomNav('home')
     this.showBottomNav()
-    this.searchSeries({series_type:'anime',query:'sukasuka'})
-    this.searchCharacter('fre')
+    // this.searchSeries({series_type:'anime',query:'sukasuka'})
+    // this.searchCharacter('fre')
   }
 }
 </script>

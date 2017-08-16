@@ -9,16 +9,16 @@
         <transition :name="pageTransitionName" @before-enter="handleBeforeEnter" @after-enter="handleAfterEnter">
           <keep-alive>
             <router-view :key="$route.fullPath" v-if="!$route.meta.notKeepAlive" class="app-view" :class="{
-                                      'app-view-with-header': appHeader.show,
-                                      'app-view-with-footer': appBottomNavigator.show
-                                  }"></router-view>
+                'app-view-with-header': appHeader.show,
+                'app-view-with-footer': appBottomNavigator.show
+            }"></router-view>
           </keep-alive>
         </transition>
         <transition :name="pageTransitionName" @before-enter="handleBeforeEnter" @after-enter="handleAfterEnter">
           <router-view :key="$route.fullPath" v-if="$route.meta.notKeepAlive" class="app-view" :class="{
-                                  'app-view-with-header': appHeader.show,
-                                  'app-view-with-footer': appBottomNavigator.show
-                              }"></router-view>
+              'app-view-with-header': appHeader.show,
+              'app-view-with-footer': appBottomNavigator.show
+          }"></router-view>
         </transition>
       </div>
       <app-bottom-navigator class="app-shell-footer" @click-nav="handleClickBottomNav">
@@ -64,7 +64,7 @@ export default {
     ...mapActions('appShell/appBottomNavigator', [
       'activateBottomNav'
     ]),
-    ...mapActions('anilistApi',[
+    ...mapActions('anilistApi', [
       'refreshToken'
     ]),
     handleBeforeEnter(el) {

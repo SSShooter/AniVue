@@ -3,8 +3,7 @@ import SETTING from '../api-setting'
 
 let state = {
   token: '',
-  expires: 0,
-  searchResult: {}
+  expires: 0
 }
 
 let gettters = {
@@ -17,10 +16,6 @@ let mutations = {
   refreshToken: (state, { access_token, expires }) => {
     state.token = access_token
     state.expires = expires
-  },
-  refreshSearchResult: (state, newResult) => {
-    state.searchResult = newResult
-    console.log(state.searchResult)
   }
 }
 
@@ -38,30 +33,19 @@ let actions = {
           console.log(err)
         })
     })
-  },
-  searchSeries: async ({ dispatch, commit, state }, { series_type, query }) => {
-    if (!state.token || (state.expires - 100) < Math.round(new Date().getTime() / 1000))
-      await dispatch('refreshToken')
-    axios(SETTING.api + series_type + '/search/' + query + '?' + 'access_token=' + state.token)
-      .then(res => {
-        commit('refreshSearchResult', res.data)
-        return Promise.resolve()
-      })
-  },
-  searchCharacter: async ({ dispatch, commit, state }, query) => {
-    if (!state.token || (state.expires - 100) < Math.round(new Date().getTime() / 1000))
-      await dispatch('refreshToken')
-    axios(SETTING.api + 'character' + '/search/' + query + '?' + 'access_token=' + state.token)
-      .then(res => {
-        commit('refreshSearchResult', res.data)
-      })
   }
 }
+import series from './anilist/series'
+import character from './anilist/character'
 
 export default {
   namespaced: true,
   state,
   gettters,
   mutations,
-  actions
+  actions,
+  modules: {
+    series,
+    character
+  }
 }
