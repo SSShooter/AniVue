@@ -1,3 +1,6 @@
+import axios from 'axios'
+import SETTING from '../../api-setting'
+
 let state = {
   searchResult: {}
 }

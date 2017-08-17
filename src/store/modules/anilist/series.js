@@ -16,14 +16,12 @@ let mutations = {
     state.searchResult = newResult
   },
   emptySearchResult: (state) => {
-    console.log('empty')
-    state.searchResult = []
+    state.searchResult = null
   }
 }
 
 let actions = {
   search: async ({ dispatch, commit ,rootState }, { series_type, query }) => {
-    console.log(rootState)
     if (!rootState.anilistApi.token || (rootState.anilistApi.expires - 100) < Math.round(new Date().getTime() / 1000))
       await dispatch('anilistApi/refreshToken', null, { root: true })
     return new Promise((resolve, reject) => {
@@ -33,7 +31,7 @@ let actions = {
           resolve()
         })
     })
-  }
+  },
 }
 export default {
   namespaced:true,

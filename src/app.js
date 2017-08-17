@@ -9,10 +9,14 @@ import {createRouter} from './router'
 import store from './store'
 import App from './App.vue'
 import Icon from 'vue-awesome/components/Icon.vue'
+import axios from 'axios'
+import VueLazyload from 'vue-lazyload'
 
 Vue.use(Vuetify)
+Vue.use(VueLazyload)
 Vue.component('icon', Icon)
 
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

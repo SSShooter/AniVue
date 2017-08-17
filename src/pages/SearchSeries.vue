@@ -1,13 +1,14 @@
 <template>
   <div class="app-search-series">
     <header>
-      <v-btn light icon class="search-btn" @click.native="searchNow">
+      <v-btn light icon class="search-btn" @click="searchNow">
         <v-icon class="search-icon">search</v-icon>
       </v-btn>
-      <form @submit.prevent="search">
+      <form @submit.prevent="searchNow">
         <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off" />
       </form>
-      <v-btn light icon class="search-btn" @click.native="query = ''">
+      <v-btn flat @click="series_type = !series_type">{{ series_type2word }}</v-btn>
+      <v-btn light icon class="search-btn" @click="query = ''">
         <v-icon class="search-icon">close</v-icon>
       </v-btn>
     </header>
@@ -15,18 +16,23 @@
       <v-progress-circular indeterminate v-bind:size="70" class="primary--text"></v-progress-circular>
     </div>
     <div class="search-content">
-      <v-layout class="wrapper" row wrap>
-        <v-flex class="item" xs6 v-if="searchResult && searchResult.length" v-for="item in searchResult">
-          <v-card height="100%">
-            <v-card-media :src="item.image_url_lge" height="200px"></v-card-media>
+      <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
+        没有搜索结果
+      </v-snackbar>
+      <v-layout v-if="searchResult && searchResult.length" class="wrapper" row wrap>
+        <v-flex class="item" xs6 v-for="item in searchResult">
+          <v-card height="100%" :data-id="item.id" @click="toAnimeDetail($event)">
+            <v-card-media v-lazy:background-image="item.image_url_lge" height="230px"></v-card-media>
             <div class="details">
               <div class="series-title">{{item.title_japanese}}
                 <span class="paragraph-end"></span>
               </div>
-              <div class="series-type">{{item.type}}</div>
+              <div class="series-type">{{item.type}} {{year(item.start_date_fuzzy)}}</div>
             </div>
-            <div class="star">
-              <div class="current-star"></div>
+            <div class="rate">
+              <div class="star">
+                <div class="current-star" :style="{width: item.mean_score + '%'}"></div>
+              </div>
             </div>
           </v-card>
         </v-flex>
@@ -42,13 +48,20 @@ export default {
     return {
       query: '',
       data: [],
-      loading: false
+      loading: false,
+      noResult: false,
+      // false for anime true for manga
+      series_type: false,
+      num2season: ['winter', 'spring', 'summer', 'fall']
     }
   },
   computed: {
     ...mapState('anilistApi/series', [
       'searchResult'
-    ])
+    ]),
+    series_type2word() {
+      return this.series_type ? 'manga' : 'anime'
+    }
   },
   methods: {
     ...mapActions('appShell/appHeader', [
@@ -64,10 +77,19 @@ export default {
       'emptySearchResult'
     ]),
     async searchNow() {
+      if (!this.query) return
       this.emptySearchResult()
       this.loading = true
-      await this.search({ series_type: 'anime', query: this.query })
+      this.noResult = false
+      await this.search({ series_type: this.series_type2word, query: this.query })
       this.loading = false
+      if (!this.searchResult.length) this.noResult = true
+    },
+    toAnimeDetail(e) {
+      console.log(e.currentTarget.dataset.id)
+    },
+    year(start_date_fuzzy) {
+      return Math.floor(start_date_fuzzy / 10000) || ''
     }
   },
   activated() {
@@ -81,6 +103,7 @@ export default {
 .app-search-series
     display flex
     flex-direction column
+    background-color #fff
 
 header
     display flex
@@ -100,17 +123,30 @@ header
 .search-content
     flex 1
     overflow scroll
+    background-color #eee
 
     .wrapper
         box-sizing border-box
         margin 0 20px
 
         .item
-            height 300px
+            height 310px
             margin 10px 0
             width 100%
+
+            .card
+                background-color #fff
             
+            .card__media
+                background-position center center
+                background-size contain
+                background-repeat no-repeat
+
             .series-type
+                text-align left
+                color #616161
+
+            .series-year
                 text-align left
                 color #616161
 
@@ -137,14 +173,21 @@ header
                 box-sizing border-box
                 overflow hidden
                 padding 7px 7px 0
+            
+            .rate
+                position absolute
+                bottom 0
+                padding 0 7px 7px
           
+
 form
     flex 1
 
 .search-loading
-    margin-top 30%
+    padding-top 30%
     display flex
     justify-content center
+    background-color #eee
 
 li
     list-style-type none
@@ -159,7 +202,6 @@ li
   }
   .current-star{
     height:20px;
-    width:50%;
     background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAQAAADYBBcfAAAA60lEQVR4AdXTIQjCQBTGcYNgMAt2BGGdZbHY28BeLAv/ok0wmAwWix37elsfbL2XrY7B2HbCGGPobW9bUr5yd7wf3L3HTdTI/BTkPAqypmA9Bt5Q3AZDZkQoImZD4R5VZj8UuhV0B0EMVB2jE7LAYIuFzZUnQQMGPLliY7HFYPEJL6heuXxdFVtm2No3YpF2oBSrtTnsiFtYzK6zq5iEGhZiiuPgoIGHHnPkoYGPPtDTQE+EzMnq8qJeZcwluKlKc+4suZNX+40ET2WZj1l32S9PThJ0SDgybZxMOZLgSPDFSvNbVrwEKOcP4Rt15kTMQuVR7QAAAABJRU5ErkJggg==);
     background-size:contain;
     background-repeat :repeat-x;
