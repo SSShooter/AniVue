@@ -21,21 +21,15 @@ let mutations = {
 }
 
 let actions = {
-  search: async ({ dispatch, commit ,rootState }, { series_type, query }) => {
+  search: async ({ dispatch, commit ,rootState }, query) => {
     if (!rootState.anilistApi.token || (rootState.anilistApi.expires - 100) < Math.round(new Date().getTime() / 1000))
       await dispatch('anilistApi/refreshToken', null, { root: true })
-    return new Promise((resolve, reject) => {
-      axios(SETTING.api + series_type + '/search/' + query + '?' + 'access_token=' + rootState.anilistApi.token)
-        .then(res => {
-          commit('refreshSearchResult', res.data)
-          resolve()
-        })
-    })
+    return axios(SETTING.api + 'staff/search/' + query + '?' + 'access_token=' + rootState.anilistApi.token)
   },
-  page: async ({ dispatch, commit ,rootState }, { series_type, id }) => {
+  page: async ({ dispatch, commit ,rootState }, id ) => {
     if (!rootState.anilistApi.token || (rootState.anilistApi.expires - 100) < Math.round(new Date().getTime() / 1000))
       await dispatch('anilistApi/refreshToken', null, { root: true })
-    return axios(SETTING.api + series_type + '/'+ id +'/page?' + 'access_token=' + rootState.anilistApi.token)
+    return axios(SETTING.api + 'staff/'+ id +'/page?' + 'access_token=' + rootState.anilistApi.token)
   },
 }
 export default {

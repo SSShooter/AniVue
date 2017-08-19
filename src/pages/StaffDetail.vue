@@ -1,0 +1,107 @@
+<template>
+  <div class="series-detail">
+    <v-container grid-list-lg>
+      <v-layout row wrap class="text-xs-left">
+        <v-flex xs4>
+          <img :src="pageData.image_url_med">
+        </v-flex>
+        <v-flex xs8 class="pl-3">
+          <p class="staff-j-name">{{pageData.name_first_japanese + (pageData.name_last_japanese||'')}}</p>
+          <p class="staff-e-name">{{pageData.name_first + ' ' + pageData.name_last}}</p>
+          <p class="staff-info">{{pageData.info}}</p>
+        </v-flex>
+        <v-flex xs12>
+          <v-list subheader two-line>
+            <v-subheader class="gray--text">角色</v-subheader>
+            <v-list-tile avatar v-for="item in pageData.anime" v-bind:key="item.characters[0].id">
+              <v-list-tile-avatar>
+                <img class="character-avatar" :style="{backgroundImage:'url('+item.characters[0].image_url_med+')'}">
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>{{item.characters[0].name_first}} {{item.characters[0].name_last||''}}</v-list-tile-title>
+                <v-list-tile-sub-title>from {{item.title_japanese}}</v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon class="gray--text">navigate_next</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+</template>
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'series-detail',
+  data() {
+    return {
+      pageData: {},
+      descriptToggle: true
+    }
+  },
+  methods: {
+    ...mapActions('appShell/appHeader', [
+      'setAppHeader'
+    ]),
+    ...mapActions('appShell/appBottomNavigator', [
+      'hideBottomNav'
+    ]),
+    ...mapActions('anilistApi/staff', [
+      'page'
+    ])
+  },
+  computed: {
+      
+  },
+  created() {
+    this.setAppHeader({
+      show: true,
+      title: 'Lavas',
+      showMenu: false,
+      showBack: true,
+      showLogo: false,
+      actions: [
+        {
+          icon: 'home',
+          route: {
+            name: 'home'
+          }
+        }
+      ]
+    })
+    this.hideBottomNav()
+  },
+  mounted() {
+    this.page(this.$route.params.id)
+      .then(res => {
+        console.log(res.data)
+        this.pageData = res.data
+      })
+  }
+}
+</script>
+<style lang="stylus" scoped>
+* 
+  color #212121
+
+p 
+  margin-bottom 3px
+
+.staff-j-name, .staff-e-name
+  margin-bottom 10px
+  white-space:nowrap
+  overflow-x scroll
+  overflow-y hidden
+
+.staff-info
+  max-height 80px;
+  overflow-y scroll
+
+.character-avatar
+  background-size 100%
+</style>
+
+

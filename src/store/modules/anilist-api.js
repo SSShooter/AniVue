@@ -1,6 +1,7 @@
 import axios from 'axios'
 import SETTING from '../api-setting'
 import series from './anilist/series'
+import staff from './anilist/staff'
 import character from './anilist/character'
 
 let state = {
@@ -46,6 +47,7 @@ export default {
   actions,
   modules: {
     series,
+    staff,
     character
   }
 }

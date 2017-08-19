@@ -14,6 +14,9 @@ let NotFound = () => import('@/pages/NotFound.vue');
 let User = () => import('@/pages/User.vue');
 let Search = () => import('@/pages/Search.vue');
 let SearchSeries = () => import('@/pages/SearchSeries.vue');
+let SearchStaff = () => import('@/pages/SearchStaff.vue');
+let SeriesDetail = () => import('@/pages/SeriesDetail.vue');
+let StaffDetail = () => import('@/pages/StaffDetail.vue');
 
 Vue.use(Router);
 
@@ -50,6 +53,21 @@ export function createRouter() {
         path: '/searchseries',
         name: 'searchseries',
         component: SearchSeries
+      },
+      {
+        path: '/searchstaff',
+        name: 'searchstaff',
+        component: SearchStaff
+      },
+      {
+        path: '/seriesdetail/:type/:id',
+        name: 'SeriesDetail',
+        component: SeriesDetail
+      },
+      {
+        path: '/staffdetail/:id',
+        name: 'StaffDetail',
+        component: StaffDetail
       },
       {
         path: '*',

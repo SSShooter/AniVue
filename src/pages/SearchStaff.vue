@@ -1,5 +1,5 @@
 <template>
-  <div class="app-search-series">
+  <div class="app-search-staff">
     <header>
       <v-btn light icon class="search-btn" @click="searchNow">
         <v-icon class="search-icon">search</v-icon>
@@ -7,7 +7,6 @@
       <form @submit.prevent="searchNow">
         <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off">
       </form>
-      <v-btn flat @click="series_type = !series_type">{{ series_type2word }}</v-btn>
       <v-btn light icon class="search-btn" @click="query = ''">
         <v-icon class="search-icon">close</v-icon>
       </v-btn>
@@ -19,19 +18,16 @@
       <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
         没有搜索结果
       </v-snackbar>
-      <v-layout v-if="searchResult && searchResult.length" class="wrapper" row wrap>
-        <v-flex class="item" xs6 v-for="item in searchResult">
-          <v-card height="100%" :data-id="item.id" @click="toAnimeDetail($event)">
-            <v-card-media v-lazy:background-image="item.image_url_lge" height="230px"></v-card-media>
+      <v-layout v-if="result && result.length" class="wrapper" row wrap>
+        <v-flex class="item" xs6 v-for="item in result">
+          <v-card height="100%" :data-id="item.id" @click="toStaffDetail($event)">
+            <v-card-media v-lazy:background-image="item.image_url_lge" height="200px"></v-card-media>
             <div class="details">
-              <div class="series-title">{{item.title_japanese}}
+              <div class="staff-j-name">{{item.name_first_japanese + ' ' + (item.name_last_japanese||'')}}
                 <span class="paragraph-end"></span>
               </div>
-              <div class="series-type">{{item.type}} {{year(item.start_date_fuzzy)}}</div>
-            </div>
-            <div class="rate">
-              <div class="star">
-                <div class="current-star" :style="{width: item.mean_score + '%'}"></div>
+              <div class="staff-e-name">{{item.name_first + ' ' + item.name_last}}
+                <span class="paragraph-end"></span>
               </div>
             </div>
           </v-card>
@@ -44,25 +40,19 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 import router from 'vue-router'
 export default {
-  name: 'searchSeries',
+  name: 'searchStaff',
   data() {
     return {
       query: '',
-      data: [],
+      result: [],
       loading: false,
-      noResult: false,
-      // false for anime true for manga
-      series_type: false,
-      num2season: ['winter', 'spring', 'summer', 'fall']
+      noResult: false
     }
   },
   computed: {
-    ...mapState('anilistApi/series', [
+    ...mapState('anilistApi/staff', [
       'searchResult'
-    ]),
-    series_type2word() {
-      return this.series_type ? 'manga' : 'anime'
-    }
+    ])
   },
   methods: {
     ...mapActions('appShell/appHeader', [
@@ -71,24 +61,31 @@ export default {
     ...mapActions('appShell/appBottomNavigator', [
       'showBottomNav'
     ]),
-    ...mapActions('anilistApi/series', [
+    ...mapActions('anilistApi/staff', [
       'search'
     ]),
-    ...mapMutations('anilistApi/series', [
+    ...mapMutations('anilistApi/staff', [
       'emptySearchResult'
     ]),
     async searchNow() {
       if (!this.query) return
-      this.emptySearchResult()
+      this.result = []
       this.loading = true
       this.noResult = false
-      await this.search({ series_type: this.series_type2word, query: this.query })
-      this.loading = false
-      if (!this.searchResult.length) this.noResult = true
+      this.search(this.query)
+        .then(res => {
+          console.log(res)
+          if (res.data.err) {
+            this.noResult = true
+            return
+          }
+          this.result = res.data
+          this.loading = false
+        })
     },
-    toAnimeDetail(e) {
-      let type = this.series_type ? 'manga' : 'anime'
-      this.$router.push({ name: 'SeriesDetail', params: { type,id: e.currentTarget.dataset.id } })
+    toStaffDetail(e) {
+      console.log( e.currentTarget.dataset.id)
+      this.$router.push({ name: 'StaffDetail', params: { id: e.currentTarget.dataset.id } })
     },
     year(start_date_fuzzy) {
       return Math.floor(start_date_fuzzy / 10000) || ''
@@ -103,7 +100,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.app-search-series
+.app-search-staff
     display flex
     flex-direction column
     background-color #fff
@@ -133,7 +130,7 @@ header
         margin 0 20px
 
         .item
-            height 310px
+            height 260px
             margin 10px 0
             width 100%
 
@@ -145,43 +142,26 @@ header
                 background-size contain
                 background-repeat no-repeat
 
-            .series-type
-                text-align left
-                color #616161
-
-            .series-year
-                text-align left
-                color #616161
-
-            .series-title
+            .staff-j-name,.staff-e-name
                 color #212121
-                font-size 16px
                 line-height 18px
-                max-height 36px
-                min-height 18px
                 overflow hidden
                 position relative
                 white-space nowrap
                 text-align left
+                margin-left 7px
+                margin-top 7px
+              
+            .staff-j-name
+                font-size 20px
 
-            .paragraph-end
-                position absolute
-                right 0
-                height: 19px
-                width: 45px
-                background-image -webkit-linear-gradient(left,rgba(255,255,255,0),rgba(255,255,255,1))
-                background linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,1))
-
-            .details
-                box-sizing border-box
-                overflow hidden
-                padding 7px 7px 0
-            
-            .rate
-                position absolute
-                bottom 0
-                padding 0 7px 7px
-          
+                .paragraph-end
+                    position absolute
+                    right 0
+                    height: 19px
+                    width: 45px
+                    background-image -webkit-linear-gradient(left,rgba(255,255,255,0),rgba(255,255,255,1))
+                    background linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,1))
 
 form
     flex 1

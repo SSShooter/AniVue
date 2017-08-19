@@ -115,7 +115,7 @@ $btn-color = #fff
 
     // 改变 icon 大小
     .app-header-icon
-        color $btn-color
+        color #fff !important
         width 20px
         height 20px
 
