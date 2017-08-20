@@ -3,7 +3,7 @@
     <v-container grid-list-lg>
       <v-layout row wrap class="text-xs-left">
         <v-flex xs4>
-          <img :src="pageData.image_url_med">
+          <img :src="pageData.image_url_med" width="100%">
         </v-flex>
         <v-flex xs8 class="pl-3">
           <p class="staff-j-name">{{pageData.name_first_japanese + (pageData.name_last_japanese||'')}}</p>

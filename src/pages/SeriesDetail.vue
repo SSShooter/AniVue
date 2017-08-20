@@ -3,7 +3,7 @@
     <v-container grid-list-lg>
       <v-layout row wrap class="text-xs-left">
         <v-flex xs4>
-          <img :src="pageData.image_url_med">
+          <img :src="pageData.image_url_med" width="100%">
         </v-flex>
         <v-flex xs8 class="pl-3">
           <p class="title">{{pageData.title_japanese}}</p>
@@ -27,13 +27,13 @@
         <v-flex xs12>
           <v-list subheader two-line>
             <v-subheader class="gray--text">主要角色</v-subheader>
-            <v-list-tile avatar v-for="item in pageData.characters" v-bind:key="item.title">
+            <v-list-tile avatar v-for="item in pageData.characters" v-bind:key="item.id">
               <v-list-tile-avatar>
                 <img class="character-avatar" :style="{backgroundImage:'url('+item.image_url_med+')'}">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>{{item.name_first}} {{item.name_last||''}}</v-list-tile-title>
-                <v-list-tile-sub-title>{{'cv ' + item.actor[0].name_first + ' ' + (item.actor[0].name_last||'')}}</v-list-tile-sub-title>
+                <v-list-tile-sub-title v-if="item.actor.length">{{'cv ' + item.actor[0].name_first + ' ' + (item.actor[0].name_last||'')}}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-icon class="gray--text">navigate_next</v-icon>

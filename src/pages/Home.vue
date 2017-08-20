@@ -51,8 +51,6 @@ export default {
     })
     this.activateBottomNav('home')
     this.showBottomNav()
-    // this.searchSeries({series_type:'anime',query:'sukasuka'})
-    // this.searchCharacter('fre')
   }
 }
 </script>

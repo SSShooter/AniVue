@@ -75,7 +75,8 @@ export default {
       this.search(this.query)
         .then(res => {
           console.log(res)
-          if (res.data.err) {
+          if (res.data.error) {
+            this.loading = false
             this.noResult = true
             return
           }
@@ -84,7 +85,7 @@ export default {
         })
     },
     toStaffDetail(e) {
-      console.log( e.currentTarget.dataset.id)
+      console.log(e.currentTarget.dataset.id)
       this.$router.push({ name: 'StaffDetail', params: { id: e.currentTarget.dataset.id } })
     },
     year(start_date_fuzzy) {

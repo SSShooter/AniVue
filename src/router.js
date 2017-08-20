@@ -8,17 +8,15 @@ import Router from 'vue-router';
 import * as types from './store/mutation-types';
 
 // 定义切割点，异步加载路由组件
-let Home = () => import('@/pages/Home.vue');
-let Detail = () => import('@/pages/Detail.vue');
-let NotFound = () => import('@/pages/NotFound.vue');
+let Home = () => import('@/pages/Home.vue')
+let NotFound = () => import('@/pages/NotFound.vue')
 let User = () => import('@/pages/User.vue');
-let Search = () => import('@/pages/Search.vue');
-let SearchSeries = () => import('@/pages/SearchSeries.vue');
-let SearchStaff = () => import('@/pages/SearchStaff.vue');
-let SeriesDetail = () => import('@/pages/SeriesDetail.vue');
-let StaffDetail = () => import('@/pages/StaffDetail.vue');
+let SearchSeries = () => import('@/pages/SearchSeries.vue')
+let SearchStaff = () => import('@/pages/SearchStaff.vue')
+let SeriesDetail = () => import('@/pages/SeriesDetail.vue')
+let StaffDetail = () => import('@/pages/StaffDetail.vue')
 
-Vue.use(Router);
+Vue.use(Router)
 
 export function createRouter() {
   let router = new Router({
@@ -32,22 +30,9 @@ export function createRouter() {
         component: Home
       },
       {
-        path: '/detail/:id',
-        name: 'detail',
-        component: Detail,
-        meta: {
-          notKeepAlive: true
-        }
-      },
-      {
         path: '/user',
         name: 'user',
         component: User
-      },
-      {
-        path: '/search',
-        name: 'search',
-        component: Search
       },
       {
         path: '/searchseries',
@@ -62,7 +47,10 @@ export function createRouter() {
       {
         path: '/seriesdetail/:type/:id',
         name: 'SeriesDetail',
-        component: SeriesDetail
+        component: SeriesDetail,
+        meta: {
+          notKeepAlive: true
+        }
       },
       {
         path: '/staffdetail/:id',
