@@ -3,6 +3,7 @@ import SETTING from '../api-setting'
 import series from './anilist/series'
 import staff from './anilist/staff'
 import character from './anilist/character'
+import browse from './anilist/browse'
 
 let state = {
   token: '',
@@ -48,6 +49,7 @@ export default {
   modules: {
     series,
     staff,
-    character
+    character,
+    browse
   }
 }

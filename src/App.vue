@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <div class="app-shell app-shell-bottom-navigation">
       <app-header class="app-shell-header" @click-menu="handleClickHeaderMenu" @click-back="handleClickHeaderBack">
       </app-header>
@@ -24,7 +24,7 @@
       <app-bottom-navigator class="app-shell-footer" @click-nav="handleClickBottomNav">
       </app-bottom-navigator>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>

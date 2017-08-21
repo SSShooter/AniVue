@@ -11,6 +11,7 @@ import * as types from './store/mutation-types';
 let Home = () => import('@/pages/Home.vue')
 let NotFound = () => import('@/pages/NotFound.vue')
 let User = () => import('@/pages/User.vue');
+let Browse = () => import('@/pages/Browse.vue');
 let SearchSeries = () => import('@/pages/SearchSeries.vue')
 let SearchStaff = () => import('@/pages/SearchStaff.vue')
 let SeriesDetail = () => import('@/pages/SeriesDetail.vue')
@@ -33,6 +34,11 @@ export function createRouter() {
         path: '/user',
         name: 'user',
         component: User
+      },
+      {
+        path: '/browse',
+        name: 'browse',
+        component: Browse
       },
       {
         path: '/searchseries',
