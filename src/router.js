@@ -10,8 +10,7 @@ import * as types from './store/mutation-types';
 // 定义切割点，异步加载路由组件
 let Home = () => import('@/pages/Home.vue')
 let NotFound = () => import('@/pages/NotFound.vue')
-let User = () => import('@/pages/User.vue');
-let Browse = () => import('@/pages/Browse.vue');
+let Browse = () => import('@/pages/Browse.vue')
 let SearchSeries = () => import('@/pages/SearchSeries.vue')
 let SearchStaff = () => import('@/pages/SearchStaff.vue')
 let SeriesDetail = () => import('@/pages/SeriesDetail.vue')
@@ -29,11 +28,6 @@ export function createRouter() {
         path: '/',
         name: 'home',
         component: Home
-      },
-      {
-        path: '/user',
-        name: 'user',
-        component: User
       },
       {
         path: '/browse',

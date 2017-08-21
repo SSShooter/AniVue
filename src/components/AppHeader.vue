@@ -16,6 +16,7 @@
       </div>
       <div class="app-header-middle" v-cloak>
         <slot name="title">
+          <img src="/static/img/logo.png" style="height:30px;border-radius:50%;margin-right:7px;">
           {{ title }}
         </slot>
       </div>
@@ -112,6 +113,7 @@ $btn-color = #fff
     .app-header-middle
         flex 1
         font-size 1.2em
+        margin-left 15px
 
     // 改变 icon 大小
     .app-header-icon

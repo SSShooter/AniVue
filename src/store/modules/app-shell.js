@@ -120,7 +120,7 @@ export default {
          *
          * @type {string}
          */
-        title: 'Lavas',
+        title: 'Anivue',
 
         /**
          * logo图标名称
@@ -282,7 +282,7 @@ export default {
             icon: 'home',
 
             // 显示的文字
-            text: '主页',
+            text: 'home',
 
             // 是否是当前激活的
             active: true,
@@ -294,21 +294,21 @@ export default {
             }
           },
           {
-            name: 'user',
-            icon: 'person',
-            text: '个人中心',
-            route: '/user'
+            name: 'browse',
+            icon: 'list',
+            text: 'browse',
+            route: '/browse'
           },
           {
             name: 'searchseries',
             icon: 'book',
-            text: '搜索动画',
+            text: 'series',
             route: '/searchseries'
           },
           {
             name: 'searchstaff',
             icon: 'person',
-            text: '搜索声优',
+            text: 'seiyuu',
             route: '/searchstaff'
           }
         ]
