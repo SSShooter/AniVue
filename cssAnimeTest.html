@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    @keyframes open{
+      from {
+        height: auto;
+      }
+      to {
+        height: 100px;
+      }
+    }
+    @keyframes close{
+      from {
+        height: 100px;
+      }
+      to {
+        height: auto;
+      }
+    }
+    .test {
+      background-color: red;
+    }
+    .divopen {
+      animation: open 5s ease 0s 1 normal forwards;
+    }
+    .divclose {
+      animation: close 5s ease 0s 1 normal forwards;
+    }
+    .test2{
+      background-color: red;
+      transition: all 2s;
+      max-height: 10px;
+    }
+    .h {
+      max-height: 1000px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="test2">sfjaifj<br><br><br><br><br></div>
+</body>
+
+</html>

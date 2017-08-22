@@ -20,9 +20,9 @@
           <span style="vertical-align:top;color:#737373">{{pageData.popularity}}</span>
           <v-icon style="vertical-align:top;color:#737373">people</v-icon>
         </v-flex>
-        <v-flex xs12 class="description-wrapper" :style="{height:descriptToggle?'100px':'auto'}" @click="descriptToggle=!descriptToggle">
+        <v-flex xs12 class="description-wrapper des-open" :style="{'max-height':descriptToggle?'100px':'1000px'}" style="transition:all 1s;" @click="descriptToggle=!descriptToggle">
           <p class="description" v-html="pageData.description"></p>
-          <span class="paragraph-end" v-show="descriptToggle"></span>
+          <span class="paragraph-end" :style="{opacity:descriptToggle?1:0}" style="transition:all 1s;"></span>
         </v-flex>
         <v-flex xs12>
           <v-list subheader two-line>
@@ -81,7 +81,7 @@ export default {
   created() {
     this.setAppHeader({
       show: true,
-      title: 'Lavas',
+      title: 'Anivue',
       showMenu: false,
       showBack: true,
       showLogo: false,
@@ -136,6 +136,12 @@ p
 
 .character-avatar
   background-size 100%
+
+.title::-webkit-scrollbar-track,.title::-webkit-scrollbar,.title::-webkit-scrollbar-thumb
+  opacity 0
+
+.english-title::-webkit-scrollbar-track,.english-title::-webkit-scrollbar,.english-title::-webkit-scrollbar-thumb
+  opacity 0
 </style>
 
 

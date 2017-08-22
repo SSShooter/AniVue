@@ -62,7 +62,7 @@ export default {
   activated() {
     this.setAppHeader({
       show: true,
-      title: 'Lavas',
+      title: 'Anivue',
       showMenu: true,
       showBack: false,
       showLogo: true,

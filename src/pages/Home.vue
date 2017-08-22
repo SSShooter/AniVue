@@ -1,5 +1,7 @@
 <template>
-  <div class="app-home"></div>
+  <div class="app-home">
+    
+  </div>
 </template>
 
 <script>
@@ -10,21 +12,7 @@ export default {
   props: {},
   data() {
     return {
-      anime: {},
-      comic: {},
-      staff: {}, e1: null,
-      e2: null,
-      e3: null,
-      e4: null,
-      items: [
-        { text: 'State 1' },
-        { text: 'State 2' },
-        { text: 'State 3' },
-        { text: 'State 4' },
-        { text: 'State 5' },
-        { text: 'State 6' },
-        { text: 'State 7' }
-      ]
+
     }
   },
   methods: {
@@ -46,7 +34,7 @@ export default {
       show: true,
       title: 'Anivue',
       showBack: false,
-      showLogo: false,
+      showLogo: true,
       showMenu:false,
       actions: [
       ]

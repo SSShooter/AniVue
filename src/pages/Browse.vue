@@ -65,7 +65,7 @@ export default {
       show: true,
       title: 'Anivue',
       showBack: false,
-      showLogo: false,
+      showLogo: true,
       showMenu:false,
       actions: [
       ]

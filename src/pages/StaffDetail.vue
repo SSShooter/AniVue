@@ -11,15 +11,30 @@
           <p class="staff-info">{{pageData.info}}</p>
         </v-flex>
         <v-flex xs12>
-          <v-list subheader two-line>
-            <v-subheader class="gray--text">角色</v-subheader>
-            <v-list-tile avatar v-for="item in pageData.anime" v-bind:key="item.characters[0].id">
+          <v-list subheader two-line v-if="pageData.anime&&pageData.anime.length">
+            <v-subheader class="gray--text">Filmography</v-subheader>
+            <v-list-tile avatar v-for="item in pageData.anime" :key="item.id" :data-id="item.id" @click="toSeriesDetail">
               <v-list-tile-avatar>
                 <img class="character-avatar" :style="{backgroundImage:'url('+item.characters[0].image_url_med+')'}">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>{{item.characters[0].name_first}} {{item.characters[0].name_last||''}}</v-list-tile-title>
                 <v-list-tile-sub-title>from {{item.title_japanese}}</v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon class="gray--text">navigate_next</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+          <v-list subheader two-line v-if="pageData.anime_staff&&pageData.anime_staff.length">
+            <v-subheader class="gray--text">Staff Roles</v-subheader>
+            <v-list-tile avatar v-for="item in pageData.anime_staff" :key="item.id" :data-id="item.id" @click="toSeriesDetail">
+              <v-list-tile-avatar>
+                <img class="character-avatar" :style="{backgroundImage:'url('+item.image_url_med+')'}">
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>{{item.title_japanese}}</v-list-tile-title>
+                <v-list-tile-sub-title>from {{item.role}}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-icon class="gray--text">navigate_next</v-icon>
@@ -51,15 +66,18 @@ export default {
     ]),
     ...mapActions('anilistApi/staff', [
       'page'
-    ])
+    ]),
+    toSeriesDetail(e){
+      this.$router.push('/seriesdetail/anime/'+e.currentTarget.dataset.id)
+    }
   },
   computed: {
-      
+
   },
   created() {
     this.setAppHeader({
       show: true,
-      title: 'Lavas',
+      title: 'Anivue',
       showMenu: false,
       showBack: true,
       showLogo: false,
@@ -102,6 +120,7 @@ p
 
 .character-avatar
   background-size 100%
+
 </style>
 
 
