@@ -1,6 +1,6 @@
 <template>
   <div class="app-browse">
-    <v-container fluid>
+    <v-container fluid class="search-wrapper" :style="{'max-height':result.length?0:'1000px',opacity:result.length?0:1,'pointer-events':result.length?'none':'auto'}">
       <v-layout row wrap>
         <v-flex xs12>
           <v-layout row wrap>
@@ -28,8 +28,34 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-btn @click="searchNow">
+        <v-progress-circular v-if="loading" :size="24" indeterminate></v-progress-circular>
+        <v-icon v-else>search</v-icon>
+        <span style="margin-left:5px;">search</span>
+      </v-btn>
     </v-container>
-    <v-btn @click="searchNow">search</v-btn>
+    <v-layout v-if="result && result.length" class="series-wrapper" @scroll="test($event)" row wrap>
+      <v-flex xs12 @click="openSearchDiv" class="elevation-0 white">
+        <v-btn flat>
+          <v-icon>keyboard_arrow_up</v-icon>search</v-btn>
+      </v-flex>
+      <v-flex class="item" xs6 v-for="item in result">
+        <v-card height="100%" :data-id="item.id" @click="toAnimeDetail($event)">
+          <v-card-media v-lazy:background-image="item.image_url_lge" height="230px"></v-card-media>
+          <div class="details">
+            <div class="series-title">{{item.title_japanese}}
+              <span class="paragraph-end"></span>
+            </div>
+            <div class="series-type">{{item.type}} {{year(item.start_date_fuzzy)}}</div>
+          </div>
+          <div class="rate">
+            <div class="star">
+              <div class="current-star" :style="{width: (item.average_score || 0) + '%'}"></div>
+            </div>
+          </div>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 <script>
@@ -37,6 +63,8 @@ import { mapActions } from 'vuex'
 export default {
   data() {
     return {
+      loading: false,
+      busy: false, // infinite
       desc: false,
       yearList: Array(50).fill(0).map((v, i) => {
         return new Date().getFullYear() - i
@@ -57,7 +85,8 @@ export default {
         airing_data: '',
         full_page: '',
         page: ''
-      }
+      },
+      result: []
     }
   },
   activated() {
@@ -66,12 +95,16 @@ export default {
       title: 'Anivue',
       showBack: false,
       showLogo: true,
-      showMenu:false,
+      showMenu: false,
       actions: [
       ]
     })
     this.activateBottomNav('browse')
     this.showBottomNav()
+    window.addEventListener('scroll', function(e){console.log(e)});
+  },
+  mounted() {
+    window.addEventListener('scroll', function(e){console.log(e)});
   },
   methods: {
     ...mapActions('anilistApi/browse', [
@@ -85,16 +118,44 @@ export default {
       'activateBottomNav'
     ]),
     searchNow() {
+      this.loading = true
       let withoutNull = {}
       for (let key in this.query) {
         if (this.query[key])
           withoutNull[key] = this.query[key]
       }
-      if(this.desc&&withoutNull.sort)withoutNull.sort = withoutNull.sort + '-desc'
+      if (this.desc && withoutNull.sort) withoutNull.sort = withoutNull.sort + '-desc'
       this.search(withoutNull)
         .then(res => {
-          console.log(res.data)
+          this.loading = false
+          this.result = res.data
         })
+    },
+    test(e){console.log(e)},
+    loadMore() {
+      this.busy = true
+      this.query.page += 1
+      let withoutNull = {}
+      for (let key in this.query) {
+        if (this.query[key])
+          withoutNull[key] = this.query[key]
+      }
+      if (this.desc && withoutNull.sort) withoutNull.sort = withoutNull.sort + '-desc'
+      this.search(withoutNull)
+        .then(res => {
+          this.busy = false
+          this.result.push(res.data)
+        })
+    },
+    openSearchDiv() {
+      this.result = []
+    },
+    toAnimeDetail(e) {
+      let type = this.series_type ? 'manga' : 'anime'
+      this.$router.push({ name: 'SeriesDetail', params: { type, id: e.currentTarget.dataset.id } })
+    },
+    year(start_date_fuzzy) {
+      return Math.floor(start_date_fuzzy / 10000) || ''
     }
   },
 
@@ -104,5 +165,10 @@ export default {
 <style lang="stylus" scoped>
 .input-group
   padding-bottom 0
+
+.search-wrapper
+  transition all 1s
+  overflow hidden
+  padding-top 0
 </style>
 

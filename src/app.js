@@ -11,7 +11,9 @@ import App from './App.vue'
 import Icon from 'vue-awesome/components/Icon.vue'
 import axios from 'axios'
 import VueLazyload from 'vue-lazyload'
+import infiniteScroll from 'vue-infinite-scroll'
 
+Vue.use(infiniteScroll)
 Vue.use(Vuetify)
 Vue.use(VueLazyload)
 Vue.component('icon', Icon)

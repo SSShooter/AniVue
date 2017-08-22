@@ -19,7 +19,7 @@
       <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
         没有搜索结果
       </v-snackbar>
-      <v-layout v-if="searchResult && searchResult.length" class="wrapper" row wrap>
+      <v-layout v-if="searchResult && searchResult.length" class="series-wrapper" row wrap>
         <v-flex class="item" xs6 v-for="item in searchResult">
           <v-card height="100%" :data-id="item.id" @click="toAnimeDetail($event)">
             <v-card-media v-lazy:background-image="item.image_url_lge" height="230px"></v-card-media>
@@ -31,7 +31,7 @@
             </div>
             <div class="rate">
               <div class="star">
-                <div class="current-star" :style="{width: item.mean_score + '%'}"></div>
+                <div class="current-star" :style="{width: item.average_score + '%'}"></div>
               </div>
             </div>
           </v-card>
@@ -127,61 +127,6 @@ header
     flex 1
     overflow scroll
     background-color #eee
-
-    .wrapper
-        box-sizing border-box
-        margin 0 20px
-
-        .item
-            height 310px
-            margin 10px 0
-            width 100%
-
-            .card
-                background-color #fff
-            
-            .card__media
-                background-position center center
-                background-size contain
-                background-repeat no-repeat
-
-            .series-type
-                text-align left
-                color #616161
-
-            .series-year
-                text-align left
-                color #616161
-
-            .series-title
-                color #212121
-                font-size 16px
-                line-height 18px
-                max-height 36px
-                min-height 18px
-                overflow hidden
-                position relative
-                white-space nowrap
-                text-align left
-
-            .paragraph-end
-                position absolute
-                right 0
-                height: 19px
-                width: 45px
-                background-image -webkit-linear-gradient(left,rgba(255,255,255,0),rgba(255,255,255,1))
-                background linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,1))
-
-            .details
-                box-sizing border-box
-                overflow hidden
-                padding 7px 7px 0
-            
-            .rate
-                position absolute
-                bottom 0
-                padding 0 7px 7px
-          
 
 form
     flex 1
