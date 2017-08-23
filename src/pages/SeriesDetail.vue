@@ -24,9 +24,9 @@
           <p class="description" v-html="pageData.description"></p>
           <span class="paragraph-end" :style="{opacity:descriptToggle?1:0}" style="transition:all 1s;"></span>
         </v-flex>
-        <v-flex xs12>
+        <v-flex xs12 v-if="pageData.characters&&pageData.characters.length">
           <v-list subheader two-line>
-            <v-subheader class="gray--text">主要角色</v-subheader>
+            <v-subheader class="gray--text">characters</v-subheader>
             <v-list-tile avatar v-for="item in pageData.characters" v-bind:key="item.id">
               <v-list-tile-avatar>
                 <img class="character-avatar" :style="{backgroundImage:'url('+item.image_url_med+')'}">
@@ -114,7 +114,7 @@ p
   margin-bottom 3px
 
 .title, .english-title
-  margin-bottom 10px
+  line-height 20px
   white-space:nowrap
   overflow-x scroll
   overflow-y hidden

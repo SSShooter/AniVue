@@ -20,31 +20,18 @@
         没有搜索结果
       </v-snackbar>
       <v-layout v-if="searchResult && searchResult.length" class="series-wrapper" row wrap>
-        <v-flex class="item" xs6 v-for="item in searchResult">
-          <v-card height="100%" :data-id="item.id" @click="toAnimeDetail($event)">
-            <v-card-media v-lazy:background-image="item.image_url_lge" height="230px"></v-card-media>
-            <div class="details">
-              <div class="series-title">{{item.title_japanese}}
-                <span class="paragraph-end"></span>
-              </div>
-              <div class="series-type">{{item.type}} {{year(item.start_date_fuzzy)}}</div>
-            </div>
-            <div class="rate">
-              <div class="star">
-                <div class="current-star" :style="{width: item.average_score + '%'}"></div>
-              </div>
-            </div>
-          </v-card>
-        </v-flex>
+        <series-card v-for="item in searchResult" :item="item" :type="series_type"></series-card>
       </v-layout>
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import SeriesCard from '@/components/SeriesCard'
 import router from 'vue-router'
 export default {
   name: 'searchSeries',
+  components: { SeriesCard },
   data() {
     return {
       query: '',
@@ -88,7 +75,7 @@ export default {
     },
     toAnimeDetail(e) {
       let type = this.series_type ? 'manga' : 'anime'
-      this.$router.push({ name: 'SeriesDetail', params: { type,id: e.currentTarget.dataset.id } })
+      this.$router.push({ name: 'SeriesDetail', params: { type, id: e.currentTarget.dataset.id } })
     },
     year(start_date_fuzzy) {
       return Math.floor(start_date_fuzzy / 10000) || ''
