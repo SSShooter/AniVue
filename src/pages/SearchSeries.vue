@@ -5,7 +5,7 @@
         <v-icon class="search-icon">search</v-icon>
       </v-btn>
       <form @submit.prevent="searchNow">
-        <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off">
+        <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="Search Series" autocapitalize="off">
       </form>
       <v-btn flat @click="series_type = !series_type">{{ series_type2word }}</v-btn>
       <v-btn light icon class="search-btn" @click="query = ''">
@@ -17,10 +17,10 @@
     </div>
     <div class="search-content">
       <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
-        没有搜索结果
+        No result
       </v-snackbar>
-      <v-layout v-if="searchResult && searchResult.length" class="series-wrapper" row wrap>
-        <series-card v-for="item in searchResult" :item="item" :type="series_type"></series-card>
+      <v-layout v-if="result && result.length" class="series-wrapper" row wrap>
+        <series-card v-for="item in result" :item="item" :type="series_type"></series-card>
       </v-layout>
     </div>
   </div>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       query: '',
-      data: [],
+      result: [],
       loading: false,
       noResult: false,
       // false for anime true for manga
@@ -44,9 +44,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('anilistApi/series', [
-      'searchResult'
-    ]),
     series_type2word() {
       return this.series_type ? 'manga' : 'anime'
     }
@@ -56,22 +53,23 @@ export default {
       'setAppHeader'
     ]),
     ...mapActions('appShell/appBottomNavigator', [
-      'showBottomNav'
+      'showBottomNav',
+      'activateBottomNav'
     ]),
     ...mapActions('anilistApi/series', [
       'search'
     ]),
-    ...mapMutations('anilistApi/series', [
-      'emptySearchResult'
-    ]),
-    async searchNow() {
+    searchNow() {
       if (!this.query) return
-      this.emptySearchResult()
+      this.result = []
       this.loading = true
       this.noResult = false
-      await this.search({ series_type: this.series_type2word, query: this.query })
-      this.loading = false
-      if (!this.searchResult.length) this.noResult = true
+      this.search({ series_type: this.series_type2word, query: this.query })
+        .then((res) => {
+          this.result = res.data
+          this.loading = false
+          if (!this.result.length) this.noResult = true
+        })
     },
     toAnimeDetail(e) {
       let type = this.series_type ? 'manga' : 'anime'
@@ -86,6 +84,7 @@ export default {
       show: false
     })
     this.showBottomNav()
+    this.activateBottomNav('searchseries')
   }
 }
 </script>

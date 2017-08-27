@@ -1,6 +1,7 @@
 <template>
   <div class="series-detail">
-    <v-container grid-list-lg>
+    <v-progress-circular indeterminate v-bind:size="70" class="primary--text" v-if="loading" style="margin-top:30%"></v-progress-circular>
+    <v-container grid-list-lg v-else>
       <v-layout row wrap class="text-xs-left">
         <v-flex xs4>
           <img :src="pageData.image_url_med" width="100%">
@@ -53,6 +54,7 @@ export default {
   name: 'series-detail',
   data() {
     return {
+      loading: true,
       pageData: {},
       descriptToggle: true
     }
@@ -67,12 +69,9 @@ export default {
     ...mapActions('anilistApi/staff', [
       'page'
     ]),
-    toSeriesDetail(e){
-      this.$router.push('/seriesdetail/anime/'+e.currentTarget.dataset.id)
+    toSeriesDetail(e) {
+      this.$router.push('/seriesdetail/anime/' + e.currentTarget.dataset.id)
     }
-  },
-  computed: {
-
   },
   created() {
     this.setAppHeader({
@@ -95,8 +94,8 @@ export default {
   mounted() {
     this.page(this.$route.params.id)
       .then(res => {
-        console.log(res.data)
         this.pageData = res.data
+        this.loading = false
       })
   }
 }

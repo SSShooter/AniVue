@@ -1,7 +1,7 @@
 <template>
   <div class="app-browse" @scroll="listenSrcoll($event)">
       <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
-        没有搜索结果
+        No result
       </v-snackbar>
     <search-field v-model="query" :searchFunc="searchNow" :isShow="result.length" :isLoading="loading"></search-field>
     <v-layout v-if="result && result.length" class="series-wrapper" row wrap>
@@ -9,7 +9,7 @@
         <v-btn flat>
           <v-icon>keyboard_arrow_up</v-icon>search</v-btn>
       </v-flex>
-      <series-card v-for="item in result" :item="item"></series-card>
+      <series-card v-for="item in result" :item="item" :key="item.id"></series-card>
     </v-layout>
   </div>
 </template>
@@ -70,7 +70,6 @@ export default {
     },
     listenSrcoll(e) {
       let bottom = document.querySelector('.series-wrapper').getBoundingClientRect().bottom
-      console.log(bottom)
       if (bottom < 700 && !this.busy)
         this.loadMore()
     },

@@ -5,7 +5,7 @@
         <v-icon class="search-icon">search</v-icon>
       </v-btn>
       <form @submit.prevent="searchNow">
-        <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off">
+        <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="Search Staff" autocapitalize="off">
       </form>
       <v-btn light icon class="search-btn" @click="query = ''">
         <v-icon class="search-icon">close</v-icon>
@@ -16,7 +16,7 @@
     </div>
     <div class="search-content">
       <v-snackbar v-model="noResult" :timeout="2000" absolute primary>
-        没有搜索结果
+        No result
       </v-snackbar>
       <v-layout v-if="result && result.length" class="wrapper" row wrap>
         <v-flex class="item" xs6 v-for="item in result">
@@ -59,7 +59,8 @@ export default {
       'setAppHeader'
     ]),
     ...mapActions('appShell/appBottomNavigator', [
-      'showBottomNav'
+      'showBottomNav',
+      'activateBottomNav'
     ]),
     ...mapActions('anilistApi/staff', [
       'search'
@@ -97,6 +98,7 @@ export default {
       show: false
     })
     this.showBottomNav()
+    this.activateBottomNav('searchstaff')
   }
 }
 </script>

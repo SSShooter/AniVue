@@ -16,7 +16,7 @@
             <v-select bottom v-bind:items="sortList" v-model="query.sort" label="sort" single-line></v-select>
           </v-flex>
           <v-flex xs3>
-            <v-checkbox label="desc" v-model="query.desc"></v-checkbox>
+            <v-checkbox label="desc" v-model="query.desc" color="primary"></v-checkbox>
           </v-flex>
           <v-flex xs6>
             <v-select bottom v-bind:items="genreList" v-model="query.genre" label="genre" single-line></v-select>
