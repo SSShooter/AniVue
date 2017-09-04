@@ -3,7 +3,7 @@
     <v-progress-circular indeterminate v-bind:size="70" class="primary--text" v-if="loading" style="margin-top:30%"></v-progress-circular>
     <v-container grid-list-lg v-else>
       <v-layout row wrap class="text-xs-left">
-        <v-flex xs4>
+        <v-flex xs4 style="height:160px;overflow:hidden;">
           <img :src="pageData.image_url_med" width="100%">
         </v-flex>
         <v-flex xs8 class="pl-3">
@@ -28,7 +28,7 @@
         <v-flex xs12 v-if="pageData.characters&&pageData.characters.length">
           <v-list subheader two-line>
             <v-subheader class="gray--text">characters</v-subheader>
-            <v-list-tile avatar v-for="item in pageData.characters" v-bind:key="item.id">
+            <v-list-tile avatar v-for="item in pageData.characters" v-bind:key="item.id" :data-id="item.actor[0].id" @click="toStaffDetail($event)">
               <v-list-tile-avatar>
                 <img class="character-avatar" :style="{backgroundImage:'url('+item.image_url_med+')'}">
               </v-list-tile-avatar>
@@ -53,7 +53,7 @@ export default {
   name: 'series-detail',
   data() {
     return {
-      loading:true,
+      loading: true,
       pageData: {},
       descriptToggle: true
     }
@@ -67,7 +67,11 @@ export default {
     ]),
     ...mapActions('anilistApi/series', [
       'page'
-    ])
+    ]),
+    toStaffDetail(e) {
+      if (e.currentTarget.dataset.id)
+        this.$router.push({ name: 'StaffDetail', params: {id:e.currentTarget.dataset.id} })
+    }
   },
   computed: {
     year() {
